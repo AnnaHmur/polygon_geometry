@@ -26,7 +26,7 @@ class PolygonModel:
     DEFAULT_SRID = 4326
     
     @classmethod
-    async def get(cls, polygon_id):
+    async def get(cls, polygon_id: int):
         query = pt.select().where(pt.c.id == polygon_id)
         polygon = await db.fetch_one(query)
         return polygon
@@ -38,12 +38,12 @@ class PolygonModel:
         return polygon_id
 
     @classmethod
-    async def update(cls, polygon_id, **data):
+    async def update(cls, polygon_id: int, **data):
         data["_updated"] = datetime.now()
         query = pt.update().where(pt.c.id == polygon_id).values(**data)
         await db.execute(query)
 
     @classmethod
-    async def delete(cls, polygon_id):
+    async def delete(cls, polygon_id: int):
         query = pt.delete().where(pt.c.id == polygon_id)
         _ = await db.execute(query)

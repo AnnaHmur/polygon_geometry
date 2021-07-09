@@ -1,13 +1,12 @@
 from fastapi import FastAPI, status
 from fastapi.responses import JSONResponse
 
-from app.database import db
-from app.models import PolygonModel
-from app.schemas import PolygonSchema, PolygonResponseSchema, SRIDField
-
 from shapely.wkt import loads
 from geoalchemy2.shape import to_shape
 
+from app.database import db
+from app.models import PolygonModel
+from app.schemas import PolygonSchema, PolygonResponseSchema, SRIDField
 from app.helpers import transform_polygon
 
 
@@ -32,8 +31,8 @@ async def create_polygon(polygon: PolygonSchema):
 @app.get("/api/v1/polygon/{polygon_id}", response_model=PolygonResponseSchema)
 async def get_polygon(polygon_id: int, srid: SRIDField):
     polygon = await PolygonModel.get(polygon_id)
-    geom = polygon["geom"]
-    geom = to_shape(geom)
+    geom = to_shape(polygon["geom"])
+
     return PolygonResponseSchema(
         id=polygon_id,
         name=polygon["name"],
@@ -55,8 +54,7 @@ async def update_polygon(polygon_id: int, polygon: PolygonSchema):
     await PolygonModel.update(polygon_id, **p)
     polygon = await PolygonModel.get(polygon_id)
 
-    geom = polygon["geom"]
-    geom = to_shape(geom)
+    geom = to_shape(polygon["geom"])
     return PolygonResponseSchema(
         id=polygon_id,
         name=polygon["name"],

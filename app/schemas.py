@@ -4,7 +4,7 @@ from pyproj.crs import CRSError
 from geoalchemy2 import WKBElement
 from shapely.errors import WKTReadingError
 from shapely.wkt import loads
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, Field, validator
 
 
 class SRIDField(int):
@@ -31,7 +31,7 @@ class PolygonSchema(BaseModel):
     class_id: int
     name: str
     props: dict
-    geom: str
+    geom: str = Field(description="Example: \"POLYGON ((51.0 3.0, 51.3 3.61, 51.3 3.0, 51.0 3.0))\"")
     srid: SRIDField
 
     class Config:
